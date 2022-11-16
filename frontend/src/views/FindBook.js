@@ -9,11 +9,6 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  useColorScheme,
-  ScrollView,
-  ImageBackground,
-  Modal,
-  Pressable,
   View,
 } from "react-native";
 
