@@ -1,5 +1,4 @@
 import {BSON} from "realm";
-
 export class Book {
   constructor({
     _id = new BSON.ObjectId(),
@@ -41,15 +40,15 @@ export class Book {
       owner_id: "string",
       key: "string",
       title: "string",
-      authors: "array",
+      authors: "{}",
       numberOfPages: "int",
-      publishers: "array",
+      publishers: "{}",
       publishDate: "date",
-      subjects: "array",
+      subjects: "{}",
       notes: "string",
-      tableOfContents: "array",
-      links: "array",
-      cover: "object",
+      tableOfContents: "{}",
+      links: "{}",
+      cover: "{}",
       assignee: {
         type: "linkingObjects",
         objectType: "Cubby",

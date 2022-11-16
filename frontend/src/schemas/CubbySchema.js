@@ -22,7 +22,7 @@ export class Cubby {
       owner_id: "string",
       name: "string",
       description: "string",
-      // books: "Book[]",
+      books: "Book[]",
     },
     primaryKey: "_id",
   };
