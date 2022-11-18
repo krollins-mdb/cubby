@@ -1,19 +1,20 @@
-import {BSON} from "realm";
 import {Realm} from '@realm/react'
 
 export class Cubby extends Realm.Object {
-  constructor({
+  constructor(
+    realm,
     _id,
     owner_id,
     name,
     description,
     books
-  }) {
-    this._id = _id;
-    this.owner_id = owner_id;
-    this.name = name;
-    this.description = description;
-    this.books = books;
+  ) {super(realm, {
+      _id,
+      owner_id,
+      name,
+      description,
+      books
+    });
   }
 
   static generate(owner_id, name, description, books) {

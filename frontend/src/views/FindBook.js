@@ -1,19 +1,19 @@
-import React, {useState, useEffect} from "react";
-import {useUser} from "@realm/react";
+import React, {useState} from "react";
 import {
   Alert,
   Button,
   FlatList,
   Image,
   SafeAreaView,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
   View,
 } from "react-native";
 
-export function FindBook() {
-  const user = useUser();
+export function FindBook({route, navigation}) {
+  const originCubby = JSON.parse(route.params.cubby);
   const [isbn, setIsbn] = useState("");
   const [bookInfo, setBookInfo] = useState("");
   const [findBookButtonText, setFindBookButtonText] = useState("Find book");
@@ -28,9 +28,6 @@ export function FindBook() {
       .then((jsonObject) => {
         setBookInfo(jsonObject[`ISBN:${isbn}`]);
 
-        // TODO: Need to make sure user is available
-        bookInfo.owner_id = user.id;
-
         setFindBookButtonText("Find another book");
 
         return;
@@ -38,9 +35,6 @@ export function FindBook() {
       .catch((error) => {
         Alert.alert(`Failed request: ${error.message}`);
       });
-
-    // const creds = Realm.Credentials.emailPassword(email, password);
-    // await app.logIn(creds);
   };
 
   const Item = ({ title }) => (
@@ -77,19 +71,35 @@ export function FindBook() {
         
       </View>
 
+      {/* <ScrollView>
+        <Text>{JSON.stringify(bookInfo, null, 2)}</Text>
+      </ScrollView> */}
+      
+
       {bookInfo &&
         <View style={styles.bookContainer}>
-          <Image
-            style={{
-              resizeMode: "cover",
-              height: 200,
-              width: 125,
-              marginRight: 10,
-            }}
-            source={{
-              uri: bookInfo.cover.medium,
-            }}
-          />
+          <View>
+            <Image
+              style={{
+                resizeMode: "cover",
+                height: 200,
+                width: 125,
+                marginRight: 10,
+              }}
+              source={{
+                uri: bookInfo.cover.medium,
+              }}
+            />
+            <Button 
+              title="Add book to Cubby"
+              onPress={() => {
+                navigation.navigate("Add a book", {
+                  cubby: JSON.stringify(originCubby),
+                  book: JSON.stringify(bookInfo)
+                });
+              }}
+            />
+          </View>
           <View>
             <Text>
               {bookInfo.title}

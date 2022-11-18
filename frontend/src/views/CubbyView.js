@@ -1,19 +1,16 @@
-import React, {useState} from "react";
-import {BSON} from "realm";
-import Realm from "realm";
-import {useApp} from "@realm/react";
+import React, {useState, useEffect} from "react";
 import {useUser} from "@realm/react";
 import {
-  Alert,
   Button,
   FlatList,
-  SafeAreaView,
   StyleSheet,
   Text,
   TextInput,
-  useColorScheme,
   View,
 } from "react-native";
+
+// Component imports
+import {AppButton} from "../components/AppButton";
 
 import {Cubby} from "../schemas/CubbySchema";
 import RealmContext from "../RealmContext";
@@ -31,79 +28,103 @@ export function CubbyView({navigation}) {
     <View style={styles.separator} />
   );
 
-  const Item = ({ title, description, books }) => (
+  const Item = ({ cubby, title, description, books }) => (
     <View style={styles.cubby}>
       <Text>{title}</Text>
       <Text>{description}</Text>
       <Text>{books.length} books added</Text>
+
+      <View style={styles.buttonGroup}>
+        <AppButton 
+          style={styles.button}
+          title="Add book"
+          onPress={() => {
+            navigation.navigate("Find a book", {cubby: JSON.stringify(cubby)});
+          }}
+        />
+        <AppButton 
+          title="Manage Cubby"
+          // onPress={() => {
+          //   navigation.navigate("Find a book", {cubby: JSON.stringify(cubby)});
+          // }}
+        />
+        <AppButton 
+          bgColor={"#5F2234"}
+          title="Delete Cubby"
+          onPress={() => {
+            realm.write(() => {
+              realm.delete(cubby);
+            });
+          }}
+        />
+      </View>
+      
     </View>
   );
 
   const renderItem = ({ item }) => (
-    <Item title={item.name} description={item.description} books={item.books} />
+    <Item cubby={item} title={item.name} description={item.description} books={item.books} />
   );
 
+  useEffect(() => {
+    realm.subscriptions.update(mutableSubs => {
+      mutableSubs.add(realm.objects("Cubby"));
+    });
+  }, [realm, cubbies]);
+
   return (
-    <View style={styles.container}>
-      <Text>This is the Cubby view!</Text>
-      <Text>Not much here at the moment...</Text>
-      <Text>But you could try to add a book.</Text>
-      <Button 
-        title="Add a book"
-        onPress={() => {
-          navigation.navigate("Find a book");
-        }}
-      />
+    <View style={styles.spreadContainer}>
+      <View style={styles.container}>      
+        {/* TODO: Need to handle if Realm isn't working and/or Cubbies isn't available. */}
+        <View style={styles.container}>
+          <Text>My Cubbies ({cubbies.length} total)</Text>
 
-      <Separator />
-      
-      {/* TODO: Need to handle if Realm isn't working and/or Cubbies isn't available. */}
-      <View style={styles.container}>
-        <Text>My Cubbies ({cubbies.length} total)</Text>
+          {/* <Text>{JSON.stringify(cubbies, null, 2)}</Text> */}
 
-        <FlatList
-          style={styles.flexWrap}
-          data={cubbies}
-          renderItem={renderItem}
-          keyExtractor={cubby => cubby._id}
-        />
+          <FlatList
+            // columnWrapperStyle={styles.wrap}
+            numColumns={2}
+            data={cubbies}
+            renderItem={renderItem}
+            keyExtractor={cubby => cubby._id}
+          />
 
-      </View>
+        </View>
 
-      <Separator />
+        <Separator />
 
-      <View>
-        <Text>Add a new Cubby</Text>
+        <View style={styles.container}>
+          <Text>Add a new Cubby</Text>
 
-        <TextInput
-          style={styles.input}
-          onChangeText={setCubbyName}
-          value={cubbyName}
-          placeholder="Amazing Cubby"
-        />
+          <TextInput
+            style={styles.input}
+            onChangeText={setCubbyName}
+            value={cubbyName}
+            placeholder="Amazing Cubby"
+          />
 
-        <TextInput
-          style={styles.input}
-          onChangeText={setCubbyDescription}
-          value={cubbyDescription}
-          placeholder="What kind of Cubby is this?"
-        />
+          <TextInput
+            style={styles.input}
+            onChangeText={setCubbyDescription}
+            value={cubbyDescription}
+            placeholder="What kind of Cubby is this?"
+          />
 
-        <Button
-          title="Add new Cubby"
-          disabled = {!cubbyName && !cubbyDescription}
-          onPress={() => {
-            realm.write(() => {
-              realm.create("Cubby", 
-              Cubby.generate(user.id, cubbyName, cubbyDescription, []));
-            });
-            setCubbyName("");
-            setCubbyDescription("");
-          }}
-        />
-
-        <Text>{cubbyName}</Text>
-        <Text>{cubbyDescription}</Text>
+          <View style={styles.buttonGroup}>
+            <AppButton
+              title="Add new Cubby"
+              disabled = {!cubbyName && !cubbyDescription}
+              onPress={() => {
+                realm.write(() => {
+                  realm.create("Cubby", 
+                  Cubby.generate(user.id, cubbyName, cubbyDescription, []));
+                });
+                setCubbyName("");
+                setCubbyDescription("");
+              }}
+            />
+          </View>
+        </View>
       </View>
     </View>
   );
@@ -121,16 +142,26 @@ const styles = StyleSheet.create({
     borderBottomWidth: StyleSheet.hairlineWidth,
   },
   cubby: {
-    width: 100,
+    // flex: 1,
+    width: "45%",
     borderWidth: 1,
-    margin: 10,
+    margin: 2,
     padding: 10,
   },
   container: {
     flex: 1,
   },
-  flexWrap: {
-    flexDirection: "row",
-    flexWrap: "wrap",
+  spreadContainer: {
+    flex: 1,
+    flexDirection: "column",
+    justifyContent: "flex-end",
+  },
+  wrap: {
+    flexWrap: "wrap"
+  },
+  buttonGroup: {
+     flex: 1,
+     flexDirection: "row",
+     flexWrap: "wrap"
   }
 });
