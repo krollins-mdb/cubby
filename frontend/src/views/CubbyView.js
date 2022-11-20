@@ -1,72 +1,60 @@
-import React, { useState, useEffect } from "react";
-import {
-  FlatList,
+import { 
   StyleSheet,
-  Text,
-  TextInput,
   View,
+  Text,
 } from "react-native";
 
-// Component imports
-import { CubbyOverview } from "../components/CubbyOverview";
-import { AppButton } from "../components/AppButton";
-import { AddCubby } from "../components/AddCubby";
-
 import RealmContext from "../RealmContext";
-const { useRealm, useQuery } = RealmContext;
+const {useRealm, useQuery} = RealmContext;
 
-export function CubbyView({navigation}) {
+export function CubbyView({route, navigation}) {
+  const cubby = route.params.cubby;
   const realm = useRealm();
-  const cubbies = useQuery("Cubby");
-
-  const Separator = () => (
-    <View style={styles.separator} />
-  );
-
-  const renderItem = ({ item }) => (
-    <CubbyOverview cubby={item} title={item.name} description={item.description} books={item.books} />
-  );
-
-  useEffect(() => {
-    realm.subscriptions.update(mutableSubs => {
-      mutableSubs.add(realm.objects("Cubby"));
-    });
-  }, [realm, cubbies]);
 
   return (
-    <View style={styles.container}>
+    <View style={{flex: 1}}>
+      <Text>{cubby.name}</Text>
 
-      {/* TODO: Need to handle if Realm isn't working and/or Cubbies isn't available. */}
-      <View style={styles.container}>
-        <Text>My Cubbies ({cubbies.length} total)</Text>
-
-        <FlatList
-          data={cubbies}
-          renderItem={renderItem}
-          keyExtractor={cubby => cubby._id}
+      {/* <View style={styles.buttonGroup}>
+        <AppButton 
+          style={styles.button}
+          fullWidth={true}
+          title="Add book"
+          onPress={() => {
+            navigation.navigate("Find a book", {cubby: JSON.stringify(
+              {id: cubby._id, name: cubby.name}
+            )});
+          }}
         />
+        <AppButton 
+          title="Manage Cubby"
+          fullWidth={true}
+          // TODO: Navigate to the Manage Cubby screen
+          onPress={() => {
+            navigation.navigate("Manage cubby", {cubby: JSON.stringify(
+              {id: cubby._id, name: cubby.name}
+            )});
+          }}
+        />
+        <AppButton 
+          bgColor={"#5F2234"}
+          title="Delete Cubby"
+          fullWidth={true}
+          onPress={() => {
+            realm.write(() => {
+              realm.delete(cubby);
+            });
+          }}
+        />
+      </View> */}
 
-      </View>
-
-      <AppButton
-        title="Add new Cubby"
-        onPress={() => {
-          navigation.navigate("Add Cubby");
-        }}
-      />
-        
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  cubby: {
-    borderWidth: 1,
-    marginVertical: 6,
-    marginHorizontal: 10,
-    padding: 10,
-  },
-  container: {
+  colorContainer: {
     flex: 1,
-  },
+    flexDirection: "row"
+  }
 });

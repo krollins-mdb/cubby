@@ -13,10 +13,10 @@ import {
 
 // View and component imports
 import { WelcomeView } from "./views/WelcomeView";
-import { CubbyView } from './views/CubbyView';
+import { CubbyListView } from './views/CubbyListView';
 import { FindBook } from "./views/FindBook";
 import { AddBook } from "./views/AddBook";
-import { ManageCubby } from "./views/ManageCubby";
+import { CubbyView } from "./views/CubbyView";
 import { AddCubby } from "./components/AddCubby";
 import { SignoutButton } from './components/SignoutButton';
 import Theme from "./Theme";
@@ -39,7 +39,7 @@ const AppWrapper = () => {
   );
 };
 
-const App = () => {
+const App = (route) => {
   const isDarkMode = useColorScheme() === "dark";
   const colors = isDarkMode ? Theme.dark : Theme.light;
 
@@ -89,7 +89,7 @@ const App = () => {
             <Stack.Group>
               <Stack.Screen
                 name="Home"
-                component={CubbyView}
+                component={CubbyListView}
                 options={{ 
                   title: "Let's get Cubby!",
                   cardStyle:{
@@ -102,18 +102,21 @@ const App = () => {
                 component={FindBook}
               />
               <Stack.Screen
-                name="Add a book"
-                component={AddBook}
-              />
-              {/* TODO: Add Cubby management screen */}
-              <Stack.Screen
                 name="Manage cubby"
-                component={ManageCubby}
+                component={CubbyView}
+                options={({ route }) => ({ title: route.params.cubby.name })}
               />
             </Stack.Group>
             {/* Stack group of modal screens */}
             <Stack.Group screenOptions={{ presentation: 'modal' }}>
-              <Stack.Screen name="Add Cubby" component={AddCubby} />
+              <Stack.Screen 
+                name="Add Cubby" 
+                component={AddCubby} 
+              />
+              <Stack.Screen
+                name="Add a book"
+                component={AddBook}
+              />
             </Stack.Group>
           </Stack.Navigator>
         </NavigationContainer>

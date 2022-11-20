@@ -7,12 +7,8 @@ import { useNavigation } from '@react-navigation/native';
 
 import {AppButton} from "../components/AppButton";
 
-import RealmContext from "../RealmContext";
-const {useRealm, useQuery} = RealmContext;
-
 export function CubbyOverview({ cubby, title, description, books }) {
   const navigation = useNavigation();
-  const realm = useRealm();
 
   return (
     <View style={styles.cubby}>
@@ -23,38 +19,14 @@ export function CubbyOverview({ cubby, title, description, books }) {
         <Text>{books.length} books added</Text>
       </View>
 
-      <View style={styles.buttonGroup}>
-        <AppButton 
-          style={styles.button}
-          fullWidth={true}
-          title="Add book"
-          onPress={() => {
-            navigation.navigate("Find a book", {cubby: JSON.stringify(
-              {id: cubby._id, name: cubby.name}
-            )});
-          }}
-        />
-        <AppButton 
-          title="Manage Cubby"
-          fullWidth={true}
-          // TODO: Navigate to the Manage Cubby screen
-          onPress={() => {
-            navigation.navigate("Manage cubby", {cubby: JSON.stringify(
-              {id: cubby._id, name: cubby.name}
-            )});
-          }}
-        />
-        <AppButton 
-          bgColor={"#5F2234"}
-          title="Delete Cubby"
-          fullWidth={true}
-          onPress={() => {
-            realm.write(() => {
-              realm.delete(cubby);
-            });
-          }}
-        />
-      </View>
+      <AppButton 
+      style={styles.button}
+        fullWidth={true}
+        title="Go to Cubby"
+        onPress={() => {
+          navigation.navigate("Manage cubby", {cubby});
+        }}
+      />
     </View>
   );
 }
