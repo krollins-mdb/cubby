@@ -12,17 +12,18 @@ import {
 } from "react-native";
 
 // View and component imports
-import {WelcomeView} from "./views/WelcomeView";
-import {CubbyView} from './views/CubbyView';
-import {FindBook} from "./views/FindBook";
-import {AddBook} from "./views/AddBook";
-import {ManageCubby} from "./views/ManageCubby";
-import {SignoutButton} from './components/SignoutButton';
+import { WelcomeView } from "./views/WelcomeView";
+import { CubbyView } from './views/CubbyView';
+import { FindBook } from "./views/FindBook";
+import { AddBook } from "./views/AddBook";
+import { ManageCubby } from "./views/ManageCubby";
+import { AddCubby } from "./components/AddCubby";
+import { SignoutButton } from './components/SignoutButton';
 import Theme from "./Theme";
 
 // Realm imports
-import {AppProvider, UserProvider, useApp} from "@realm/react";
-import {appId, baseUrl} from "../realm";
+import  {AppProvider, UserProvider } from "@realm/react";
+import  {appId, baseUrl } from "../realm";
 import RealmContext from "./RealmContext";
 
 const Stack = createNativeStackNavigator();
@@ -85,29 +86,35 @@ const App = () => {
         
         <NavigationContainer theme={NavigatorTheme}>
           <Stack.Navigator>
-            <Stack.Screen
-              name="Home"
-              component={CubbyView}
-              options={{ 
-                title: "Let's get Cubby!",
-                cardStyle:{
-                  backgroundColor: colors.surface2
-                }
-              }}
-            />
-            <Stack.Screen
-              name="Find a book"
-              component={FindBook}
-            />
-            <Stack.Screen
-              name="Add a book"
-              component={AddBook}
-            />
-            {/* TODO: Add Cubby management screen */}
-            <Stack.Screen
-              name="Manage cubby"
-              component={ManageCubby}
-            />
+            <Stack.Group>
+              <Stack.Screen
+                name="Home"
+                component={CubbyView}
+                options={{ 
+                  title: "Let's get Cubby!",
+                  cardStyle:{
+                    backgroundColor: colors.surface2
+                  }
+                }}
+              />
+              <Stack.Screen
+                name="Find a book"
+                component={FindBook}
+              />
+              <Stack.Screen
+                name="Add a book"
+                component={AddBook}
+              />
+              {/* TODO: Add Cubby management screen */}
+              <Stack.Screen
+                name="Manage cubby"
+                component={ManageCubby}
+              />
+            </Stack.Group>
+            {/* Stack group of modal screens */}
+            <Stack.Group screenOptions={{ presentation: 'modal' }}>
+              <Stack.Screen name="Add Cubby" component={AddCubby} />
+            </Stack.Group>
           </Stack.Navigator>
         </NavigationContainer>
 
