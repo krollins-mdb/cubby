@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from "react";
 import {useUser} from "@realm/react";
 import {
-  Button,
   FlatList,
   StyleSheet,
   Text,
@@ -11,6 +10,7 @@ import {
 
 // Component imports
 import {AppButton} from "../components/AppButton";
+import { CubbyOverview } from "../components/CubbyOverview";
 
 import {Cubby} from "../schemas/CubbySchema";
 import RealmContext from "../RealmContext";
@@ -28,42 +28,8 @@ export function CubbyView({navigation}) {
     <View style={styles.separator} />
   );
 
-  const Item = ({ cubby, title, description, books }) => (
-    <View style={styles.cubby}>
-      <Text>{title}</Text>
-      <Text>{description}</Text>
-      <Text>{books.length} books added</Text>
-
-      <View style={styles.buttonGroup}>
-        <AppButton 
-          style={styles.button}
-          title="Add book"
-          onPress={() => {
-            navigation.navigate("Find a book", {cubby: JSON.stringify(cubby)});
-          }}
-        />
-        <AppButton 
-          title="Manage Cubby"
-          // onPress={() => {
-          //   navigation.navigate("Find a book", {cubby: JSON.stringify(cubby)});
-          // }}
-        />
-        <AppButton 
-          bgColor={"#5F2234"}
-          title="Delete Cubby"
-          onPress={() => {
-            realm.write(() => {
-              realm.delete(cubby);
-            });
-          }}
-        />
-      </View>
-      
-    </View>
-  );
-
   const renderItem = ({ item }) => (
-    <Item cubby={item} title={item.name} description={item.description} books={item.books} />
+    <CubbyOverview cubby={item} title={item.name} description={item.description} books={item.books} />
   );
 
   useEffect(() => {
@@ -73,17 +39,13 @@ export function CubbyView({navigation}) {
   }, [realm, cubbies]);
 
   return (
-    <View style={styles.spreadContainer}>
+    <View style={styles.container}>
       <View style={styles.container}>      
         {/* TODO: Need to handle if Realm isn't working and/or Cubbies isn't available. */}
         <View style={styles.container}>
           <Text>My Cubbies ({cubbies.length} total)</Text>
 
-          {/* <Text>{JSON.stringify(cubbies, null, 2)}</Text> */}
-
           <FlatList
-            // columnWrapperStyle={styles.wrap}
-            numColumns={2}
             data={cubbies}
             renderItem={renderItem}
             keyExtractor={cubby => cubby._id}
@@ -114,6 +76,7 @@ export function CubbyView({navigation}) {
             <AppButton
               title="Add new Cubby"
               disabled = {!cubbyName && !cubbyDescription}
+              // TODO: Add proper validation
               onPress={() => {
                 realm.write(() => {
                   realm.create("Cubby", 
@@ -142,19 +105,13 @@ const styles = StyleSheet.create({
     borderBottomWidth: StyleSheet.hairlineWidth,
   },
   cubby: {
-    // flex: 1,
-    width: "45%",
     borderWidth: 1,
-    margin: 2,
+    marginVertical: 6,
+    marginHorizontal: 10,
     padding: 10,
   },
   container: {
     flex: 1,
-  },
-  spreadContainer: {
-    flex: 1,
-    flexDirection: "column",
-    justifyContent: "flex-end",
   },
   wrap: {
     flexWrap: "wrap"
@@ -162,6 +119,8 @@ const styles = StyleSheet.create({
   buttonGroup: {
      flex: 1,
      flexDirection: "row",
-     flexWrap: "wrap"
+     flexWrap: "wrap",
+     justifyContent: "center",
+     marginVertical: 8,
   }
 });

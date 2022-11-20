@@ -11,17 +11,14 @@ import {
   View,
 } from "react-native";
 
-// TODO: Remove these NewAppScreen imports as the app transforms
-import {
-  Colors,
-} from "react-native/Libraries/NewAppScreen";
-
 // View and component imports
 import {WelcomeView} from "./views/WelcomeView";
 import {CubbyView} from './views/CubbyView';
 import {FindBook} from "./views/FindBook";
 import {AddBook} from "./views/AddBook";
+import {ManageCubby} from "./views/ManageCubby";
 import {SignoutButton} from './components/SignoutButton';
+import Theme from "./Theme";
 
 // Realm imports
 import {AppProvider, UserProvider, useApp} from "@realm/react";
@@ -42,12 +39,19 @@ const AppWrapper = () => {
 };
 
 const App = () => {
-  const realmApp = useApp();
-  const realmFilePath = "/data/data/com.cubby/files/mongodb-realm/cubby-client-vyxms/6373b73dab5c19ef568f66e3/fix_sync_default.realm";
   const isDarkMode = useColorScheme() === "dark";
+  const colors = isDarkMode ? Theme.dark : Theme.light;
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+  const NavigatorTheme = {
+    dark: isDarkMode,
+    colors: {
+      primary: colors.main,
+      background: colors.surface1,
+      card: colors.surface2,
+      text: colors.text2,
+      border: colors.text2,
+      notification: colors.surface2,
+    },
   };
 
   return (
@@ -76,16 +80,20 @@ const App = () => {
       <SafeAreaView style={styles.container}>
         <StatusBar
           barStyle={isDarkMode ? "light-content" : "dark-content"}
-          backgroundColor={backgroundStyle.backgroundColor}
+          backgroundColor={colors.surface1}
         />
-        <SignoutButton />
         
-        <NavigationContainer>
+        <NavigationContainer theme={NavigatorTheme}>
           <Stack.Navigator>
             <Stack.Screen
               name="Home"
               component={CubbyView}
-              options={{ title: "Let's get Cubby!" }}
+              options={{ 
+                title: "Let's get Cubby!",
+                cardStyle:{
+                  backgroundColor: colors.surface2
+                }
+              }}
             />
             <Stack.Screen
               name="Find a book"
@@ -95,38 +103,24 @@ const App = () => {
               name="Add a book"
               component={AddBook}
             />
+            {/* TODO: Add Cubby management screen */}
+            <Stack.Screen
+              name="Manage cubby"
+              component={ManageCubby}
+            />
           </Stack.Navigator>
         </NavigationContainer>
+
+        <SignoutButton />
+
       </SafeAreaView>
     </RealmProvider>
   );
 };
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: "600",
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: "400",
-  },
-  highlight: {
-    fontWeight: "700",
-  },
   container: {
     flex: 1,
-  },
-  activityContainer: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    padding: 10,
   },
 });
 

@@ -1,16 +1,16 @@
 import React, {useState} from "react";
 import {
   Alert,
-  Button,
   FlatList,
   Image,
   SafeAreaView,
-  ScrollView,
   StyleSheet,
   Text,
   TextInput,
   View,
 } from "react-native";
+
+import {AppButton} from "../components/AppButton";
 
 export function FindBook({route, navigation}) {
   const originCubby = JSON.parse(route.params.cubby);
@@ -19,6 +19,7 @@ export function FindBook({route, navigation}) {
   const [findBookButtonText, setFindBookButtonText] = useState("Find book");
 
   const requestBook = async () => {
+    // TODO: Test for malformed ISBNs before submitting request.
     // Request book info from Book API: https://openlibrary.org/dev/docs/api/books
     await fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&jscmd=data&format=json`)
     // fetch(`https://openlibrary.org/isbn/${isbn}.json`)
@@ -64,7 +65,7 @@ export function FindBook({route, navigation}) {
           keyboardType="numeric"
         />
         
-        <Button
+        <AppButton
           title={findBookButtonText}
           onPress={requestBook}
         />
@@ -90,7 +91,7 @@ export function FindBook({route, navigation}) {
                 uri: bookInfo.cover.medium,
               }}
             />
-            <Button 
+            <AppButton 
               title="Add book to Cubby"
               onPress={() => {
                 navigation.navigate("Add a book", {

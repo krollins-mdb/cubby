@@ -1,4 +1,5 @@
-import {Button, Alert} from 'react-native';
+import {Alert} from 'react-native';
+import {AppButton} from "../components/AppButton";
 import {useUser} from '@realm/react';
 
 export function SignoutButton() {
@@ -13,7 +14,7 @@ export function SignoutButton() {
   };
 
   return (
-    <Button 
+    <AppButton 
       title="Sign out"
       onPress={() => {
         Alert.alert("Do you want to sign out?", null, [

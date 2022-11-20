@@ -1,10 +1,11 @@
 import { View, Button, StyleSheet, TouchableOpacity, Text } from "react-native";
 
-export function AppButton({ onPress, title, bgColor }) {
-
+export function AppButton({ onPress, title, bgColor, fullWidth }) {
+  // TODO: Add fontcolor dynamic style
   return (
     <TouchableOpacity onPress={onPress} style={[styles.appButtonContainer, 
-    bgColor ? { backgroundColor: bgColor } : { backgroundColor: "#5A527D" }
+    bgColor ? { backgroundColor: bgColor } : { backgroundColor: "#5A527D" },
+    fullWidth ? styles.fullWidth : styles.fitWidth
     ]}>
       <Text style={styles.appButtonText}>{title}</Text>
     </TouchableOpacity>
@@ -14,11 +15,8 @@ export function AppButton({ onPress, title, bgColor }) {
 const styles = StyleSheet.create({
   appButtonContainer: {
     elevation: 4,
-    borderRadius: 10,
     paddingVertical: 6,
     paddingHorizontal: 8,
-    marginHorizontal: 2,
-    marginVertical: 1,
   },
   appButtonText: {
     fontSize: 12,
@@ -26,4 +24,11 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     alignSelf: "center",
   },
+  fullWidth: {
+    margin: 0,
+  },
+  fitWidth: {
+    marginHorizontal: 2,
+    marginVertical: 1,
+  }
 });

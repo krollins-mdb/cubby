@@ -3,13 +3,14 @@ import Realm from "realm";
 import {useApp} from "@realm/react";
 import {
   Alert,
-  Button,
   SafeAreaView,
   StyleSheet,
   Text,
   TextInput,
   View,
 } from "react-native";
+
+import {AppButton} from "../components/AppButton";
 
 export function WelcomeView() {
   const [email, setEmail] = useState("");
@@ -48,8 +49,8 @@ export function WelcomeView() {
   };
 
   return (
-    <SafeAreaView>
-      <View>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
         <Text>Welcome to Cubby</Text>
         <Text> Create an account or sign in to get started</Text>
         
@@ -67,29 +68,33 @@ export function WelcomeView() {
         />
         {!isInSignUpMode ? (
           <>
-            <Button
-              title="Create Account"
-              buttonStyle={styles.mainButton}
-              onPress={onPressSignUp}
-            />
-            <Button
-              title="Already have an account? Log In"
-              type="clear"
-              onPress={() => setIsInSignUpMode(!isInSignUpMode)}
-            />
+            <View style={styles.buttonGroup}>
+              <AppButton
+                title="Create account"
+                buttonStyle={styles.mainButton}
+                onPress={onPressSignUp}
+              />
+              <AppButton
+                title="Sign in"
+                type="clear"
+                onPress={() => setIsInSignUpMode(!isInSignUpMode)}
+              />
+            </View>
           </>
         ) : (
           <>
-            <Button
-              title="Log In"
-              buttonStyle={styles.mainButton}
-              onPress={onPressSignIn}
-            />
-            <Button
-              title="Don't have an account? Create Account"
-              type="clear"
-              onPress={() => setIsInSignUpMode(!isInSignUpMode)}
-            />
+            <View style={styles.buttonGroup}>
+              <AppButton
+                title="Sign in"
+                buttonStyle={styles.mainButton}
+                onPress={onPressSignIn}
+              />
+              <AppButton
+                title="Create account"
+                type="clear"
+                onPress={() => setIsInSignUpMode(!isInSignUpMode)}
+              />
+            </View>
           </>
         )}
       </View>
@@ -102,5 +107,14 @@ const styles = StyleSheet.create({
     margin: 12,
     borderWidth: 1,
     padding: 10,
+  },
+  buttonGroup: {
+    flex: 1,
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center"
+  },
+  container: {
+    flex: 1,
   },
 });
