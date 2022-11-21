@@ -7,13 +7,13 @@ import { useNavigation } from '@react-navigation/native';
 
 import {AppButton} from "../components/AppButton";
 
-export function CubbyOverview({ cubby, title, description, books }) {
+export function CubbyOverview({ cubbyId, name, description, books }) {
   const navigation = useNavigation();
 
   return (
     <View style={styles.cubby}>
       <View style={styles.infoContainer}>
-        <Text>{title}</Text>
+        <Text>{name}</Text>
         <Text>{description}</Text>
         {/* TODO: Make pluaral dynamic. Just "book" if there's only 1 */}
         <Text>{books.length} books added</Text>
@@ -24,7 +24,7 @@ export function CubbyOverview({ cubby, title, description, books }) {
         fullWidth={true}
         title="Go to Cubby"
         onPress={() => {
-          navigation.navigate("Manage cubby", {cubby});
+          navigation.navigate("Manage cubby", {cubbyId, name});
         }}
       />
     </View>
@@ -33,6 +33,7 @@ export function CubbyOverview({ cubby, title, description, books }) {
 
 const styles = StyleSheet.create({
   cubby: {
+    flex: 1,
     flexDirection: "row",
     borderWidth: .25,
     marginVertical: 6,

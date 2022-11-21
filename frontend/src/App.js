@@ -104,7 +104,7 @@ const App = (route) => {
               <Stack.Screen
                 name="Manage cubby"
                 component={CubbyView}
-                options={({ route }) => ({ title: route.params.cubby.name })}
+                options={({ route }) => ({ title: route.params.name })}
               />
             </Stack.Group>
             {/* Stack group of modal screens */}

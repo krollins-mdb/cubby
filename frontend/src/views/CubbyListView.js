@@ -28,6 +28,7 @@ export function CubbyListView({navigation}) {
 
       {/* TODO: Need to handle if Realm isn't working and/or 
       Cubbies isn't available. */}
+      {/* TODO: Check if there are any cubbies, show "add cubbies" message if not */}
       <ScrollView
         contentContainerStyle={{
           display: "flex",
@@ -38,8 +39,8 @@ export function CubbyListView({navigation}) {
           return (
             <CubbyOverview 
               key={index}
-              cubby={cubby} 
-              title={cubby.name} 
+              cubbyId={JSON.stringify(cubby._id)} 
+              name={cubby.name} 
               description={cubby.description} 
               books={cubby.books} 
             />

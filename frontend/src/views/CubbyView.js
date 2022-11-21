@@ -2,18 +2,46 @@ import {
   StyleSheet,
   View,
   Text,
+  ScrollView
 } from "react-native";
+
+import { AppButton } from "../components/AppButton";
 
 import RealmContext from "../RealmContext";
 const {useRealm, useQuery} = RealmContext;
 
 export function CubbyView({route, navigation}) {
-  const cubby = route.params.cubby;
+  const cubbyId = JSON.parse(route.params.cubbyId);
   const realm = useRealm();
+
+  const cubby = useQuery("Cubby").filtered(`_id == oid(${cubbyId})`)[0];
 
   return (
     <View style={{flex: 1}}>
-      <Text>{cubby.name}</Text>
+      <Text>{cubby.description}</Text>
+
+      {/* TODO: Need to handle if Realm isn't working and/or 
+      cubby isn't available. */}
+      {/* TODO: Check if there are any books. show "add book" if not */}
+      <ScrollView
+        contentContainerStyle={{
+          display: "flex",
+          flexGrow: 1,
+        }}
+      >
+        { cubby.books.map((book, index) => {
+          return (
+            <Text>{book.title}</Text>
+            // <CubbyOverview 
+            //   key={index}
+            //   cubbyId={JSON.stringify(cubby._id)} 
+            //   name={cubby.name} 
+            //   description={cubby.description} 
+            //   books={cubby.books} 
+            // />
+          )
+        })}
+      </ScrollView>
 
       {/* <View style={styles.buttonGroup}>
         <AppButton 
@@ -47,6 +75,11 @@ export function CubbyView({route, navigation}) {
           }}
         />
       </View> */}
+
+      <AppButton 
+        title="Back to Cubbies"
+        onPress={() => navigation.goBack()}
+      />
 
     </View>
   );
