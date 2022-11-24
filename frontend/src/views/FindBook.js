@@ -1,8 +1,6 @@
 import React, {useState} from "react";
 import {
   Alert,
-  FlatList,
-  Image,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -11,9 +9,10 @@ import {
 } from "react-native";
 
 import {AppButton} from "../components/AppButton";
+import { BookView } from "./BookView";
 
-export function FindBook({route, navigation}) {
-  const originCubby = JSON.parse(route.params.cubby);
+export function FindBook({route}) {
+  const sectionInfo = JSON.parse(route.params.section);
   const [isbn, setIsbn] = useState("");
   const [bookInfo, setBookInfo] = useState("");
   const [findBookButtonText, setFindBookButtonText] = useState("Find book");
@@ -38,16 +37,6 @@ export function FindBook({route, navigation}) {
       });
   };
 
-  const Item = ({ title }) => (
-    <View>
-      <Text>{title}</Text>
-    </View>
-  );
-
-  const renderItem = ({ item }) => (
-    <Item title={item.name} />
-  );
-
   return (
     <SafeAreaView style={styles.container}>
       <View>
@@ -69,58 +58,10 @@ export function FindBook({route, navigation}) {
           title={findBookButtonText}
           onPress={requestBook}
         />
-        
       </View>
-
-      {/* <ScrollView>
-        <Text>{JSON.stringify(bookInfo, null, 2)}</Text>
-      </ScrollView> */}
       
-
       {bookInfo &&
-        <View style={styles.bookContainer}>
-          <View>
-            <Image
-              style={{
-                resizeMode: "cover",
-                height: 200,
-                width: 125,
-                marginRight: 10,
-              }}
-              source={{
-                uri: bookInfo.cover.medium,
-              }}
-            />
-            <AppButton 
-              title="Add book to Cubby"
-              onPress={() => {
-                navigation.navigate("Add a book", {
-                  cubby: JSON.stringify(originCubby),
-                  book: JSON.stringify(bookInfo)
-                });
-              }}
-            />
-          </View>
-          <View>
-            <Text>
-              {bookInfo.title}
-            </Text>
-
-            <Text>Author(s)</Text>
-            <FlatList
-              data={bookInfo.authors}
-              renderItem={renderItem}
-              keyExtractor={author => author.name}
-            />
-
-            <Text>Subjects</Text>
-            <FlatList
-              data={bookInfo.subjects}
-              renderItem={renderItem}
-              keyExtractor={subject => subject.url}
-            />
-          </View>
-        </View>
+        <BookView bookInfo={bookInfo} sectionInfo={sectionInfo} />
       }
     </SafeAreaView>
   );
@@ -138,11 +79,6 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-  },
-  bookContainer: {
-    flex: 1,
-    flexDirection: "row",
-    margin: 10,
   },
   text: {
     color: "white",

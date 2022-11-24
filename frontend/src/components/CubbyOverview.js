@@ -15,8 +15,9 @@ export function CubbyOverview({ cubbyId, name, description, books }) {
       <View style={styles.infoContainer}>
         <Text>{name}</Text>
         <Text>{description}</Text>
+        {/* TODO: Figure out how to sum up all books from all sections */}
         {/* TODO: Make pluaral dynamic. Just "book" if there's only 1 */}
-        <Text>{books.length} books added</Text>
+        {/* <Text>{books.length} books added</Text> */}
       </View>
 
       <AppButton 

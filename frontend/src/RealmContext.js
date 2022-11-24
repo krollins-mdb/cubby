@@ -1,7 +1,25 @@
-import {createRealmContext} from "@realm/react";
-import {Cubby} from "./schemas/CubbySchema";
-import {Book} from "./schemas/BookSchema";
+import { createRealmContext } from "@realm/react";
+import { 
+  Cubby, 
+  Section, 
+  Book,
+  Publisher,
+  Link,
+  Author,
+  Subject,
+  Toc
+} from "./schemas/AllSchemas";
+
 
 export default createRealmContext({
-  schema: [Cubby, Book]
+  schema: [
+    Cubby, 
+    Section, 
+    Book,
+    Publisher,
+    Author,
+    Subject,
+    Toc,
+    Link
+  ]
 });
