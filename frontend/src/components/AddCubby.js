@@ -9,7 +9,7 @@ import {
 import {useUser} from "@realm/react";
 import {AppButton} from "../components/AppButton";
 
-import {Cubby} from "../schemas/CubbySchema";
+import { Cubby, Section } from "../schemas/AllSchemas";
 
 import RealmContext from "../RealmContext";
 const { useRealm } = RealmContext;
@@ -61,8 +61,20 @@ export function AddCubby({navigation}) {
               // TODO: Add proper validation
               onPress={() => {
                 realm.write(() => {
-                  realm.create("Cubby", 
-                  Cubby.generate(user.id, cubbyName, cubbyDescription, []));
+                  const newCubby = realm.create("Cubby", 
+                    Cubby.generate(user.id, cubbyName, cubbyDescription, []));
+                  // Create a default section so there's always at least one
+                  const newSection = realm.create("Section",
+                    Section.generate(
+                      user.id, 
+                      "First Cub", 
+                      [], 
+                      {
+                        main: "#DDD382",
+                        highlight: "#D65F28"
+                      }));
+                  
+                      newCubby.sections.push(newSection);
                 });
                 setCubbyName("");
                 setCubbyDescription("");

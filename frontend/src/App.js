@@ -62,6 +62,7 @@ const App = (route) => {
           initialSubscriptions: {
             update: (subs, realm) => {
               subs.add(realm.objects("Cubby"));
+              subs.add(realm.objects("Section"));
               subs.add(realm.objects("Book"));
             },
           },
@@ -77,7 +78,8 @@ const App = (route) => {
             <Text>Syncing your data...</Text>
             <ActivityIndicator size="large" />
           </View>
-        )}>
+        )}
+      >
       <SafeAreaView style={styles.container}>
         <StatusBar
           barStyle={isDarkMode ? "light-content" : "dark-content"}
