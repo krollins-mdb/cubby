@@ -14,6 +14,9 @@ const mainColor = {
 
 // }
 
+// TODO: add spacing and font definitions
+// https://shopify.engineering/5-ways-to-improve-your-react-native-styling-workflow
+
 const shadow = {
   light: {
     surfaceShadow: `${mainColor.hue}, 10%, 20%`,
